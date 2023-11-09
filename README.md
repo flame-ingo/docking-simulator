@@ -1,6 +1,8 @@
 # docking-simulator
 
-Welcome to the Space Station Docking Game! A simple web-based game where you try to dock a spaceship with a space station 
+Welcome to the Space Station Docking Game! A simple web-based game where you try to dock a spaceship with a space station. 
+
+This game was made by ChatGPT.
 
 ## How to Play
 
