@@ -130,34 +130,37 @@
                 $(".circle-outline").css("height", spaceStationSize + "px");
             }
 
-                    // Check if the game should switch to "Game Over" mode
-        if (spaceStationSize >= 770) {
-            const spaceStationCenterX = spaceStationContainer.position().left + spaceStationSize / 2;
-            const spaceStationCenterY = spaceStationContainer.position().top + spaceStationSize / 2;
-            const spaceshipCenterX = $("#spaceship-container").position().left + 200; // Assuming spaceship is 400x400
-            const spaceshipCenterY = $("#spaceship-container").position().top + 200;
+                 // Check if the game should switch to "Game Over" mode
+if (spaceStationSize >= maxSpaceStationSize) {
+    const spaceStationCenterX = spaceStationContainer.position().left + spaceStationSize / 2;
+    const spaceStationCenterY = spaceStationContainer.position().top + spaceStationSize / 2;
+    const spaceshipCenterX = $("#spaceship-container").position().left + 200; // Assuming spaceship is 400x400
+    const spaceshipCenterY = $("#spaceship-container").position().top + 200;
 
-            // Check if the space station and spaceship are aligned
-            if (spaceStationCenterX === spaceshipCenterX && spaceStationCenterY === spaceshipCenterY) {
-                // Space station and spaceship are aligned
-            } else {
-                // Space station and spaceship are not aligned
-                gameOver = true;
-                activateGameOverMode(); // Activate "Game Over" mode
-            }
-        }
+    // Check if the space station and spaceship are aligned
+    if (spaceStationCenterX === spaceshipCenterX && spaceStationCenterY === spaceshipCenterY) {
+        // Space station and spaceship are aligned
+    } else {
+        // Space station and spaceship are not aligned
+        // Wait for 2 seconds before activating Game Over mode
+        setTimeout(function () {
+            activateGameOverMode();
+        }, 2000);
+    }
+}
+
 
             }
         
         
-                        // Function to switch to "Game Over" mode
-        function activateGameOverMode() {
-            $("#background").css("background-color", "red");
-            $("#spacestation-container").hide();
-            $("#spaceship-container").hide();
-            $("#game-over").css("display", "block");
+          // Function to switch to "Game Over" mode
+function activateGameOverMode() {
+    $("#background").css("background-color", "red");
+    $("#spacestation-container").hide();
+    $("#spaceship-container").hide();
+    $("#game-over").css("display", "block");
 
-             // Add a "GAME OVER" text to the background
+    // Add a "GAME OVER" text to the background
     const gameOverText = $("<div id='game-over-text'>GAME OVER</div>");
     gameOverText.css({
         position: "absolute",
@@ -170,8 +173,9 @@
         textShadow: "2px 2px 4px #000",
         zIndex: "1",
     });
-        }
-
+    $("body").append(gameOverText);
+}           
+        
 
         
     
@@ -239,18 +243,6 @@
     </script>
     
     
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+      
 </body>
 </html>
