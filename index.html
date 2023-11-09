@@ -9,7 +9,7 @@
             overflow: hidden;
         }
         #background {
-            background-color: black;
+            background-color: rgb(0, 0, 0);
             position: absolute;
             width: 100%;
             height: 100%;
@@ -27,7 +27,7 @@
             position: absolute;
             width: 2px;
             height: 2px;
-            background-color: white;
+            background-color: rgb(250, 250, 250);
             border-radius: 50%;
         }
         #spacestation-container {
@@ -110,11 +110,13 @@
     </div>
 
     <script>
+        let gameInterval;
+        let gameRunning = true;
         let spaceStationContainer = $("#spacestation-container");
         let spaceStationSize = 100; // Initial size in pixels
         const maxSpaceStationSize = 770; // Maximum size
         const sizeIncreaseInterval = 25; // Interval for increasing size in milliseconds (half the previous value)
-    
+       
         // Function to increase the size of the space station
         function increaseSpaceStationSize() {
             if (spaceStationSize < maxSpaceStationSize) {
@@ -128,59 +130,84 @@
                 $("#small-circle").css("height", circleSize + "px");
                 $(".circle-outline").css("width", spaceStationSize + "px");
                 $(".circle-outline").css("height", spaceStationSize + "px");
+
             }
 
                  // Check if the game should switch to "Game Over" mode
-if (spaceStationSize >= maxSpaceStationSize) {
-    const spaceStationCenterX = spaceStationContainer.position().left + spaceStationSize / 2;
-    const spaceStationCenterY = spaceStationContainer.position().top + spaceStationSize / 2;
-    const spaceshipCenterX = $("#spaceship-container").position().left + 200; // Assuming spaceship is 400x400
-    const spaceshipCenterY = $("#spaceship-container").position().top + 200;
+            if (spaceStationSize >= maxSpaceStationSize) {
+                const spaceStationCenterX = spaceStationContainer.position().left + spaceStationSize / 2;
+                const spaceStationCenterY = spaceStationContainer.position().top + spaceStationSize / 2;
+                const spaceshipCenterX = $("#spaceship-container").position().left + 200; // Assuming spaceship is 400x400
+                const spaceshipCenterY = $("#spaceship-container").position().top + 200;
+                clearInterval(gameInterval);
 
-    // Check if the space station and spaceship are aligned
-    if (spaceStationCenterX === spaceshipCenterX && spaceStationCenterY === spaceshipCenterY) {
-        // Space station and spaceship are aligned
-    } else {
-        // Space station and spaceship are not aligned
-        // Wait for 2 seconds before activating Game Over mode
-        setTimeout(function () {
-            activateGameOverMode();
-        }, 2000);
-    }
-}
-
-
+                // Check if the space station and spaceship are aligned
+                if (spaceStationCenterX === spaceshipCenterX && spaceStationCenterY === spaceshipCenterY) {
+                    // Space station and spaceship are aligned
+                    // Wait for 1 second before activating Mission Complete mode
+                    setTimeout(function () {
+                        activateMissionCompleteMode();
+                    }, 1000);
+                } else {
+                    // Space station and spaceship are not aligned
+                    // Wait for 2 seconds before activating Game Over mode
+                    setTimeout(function () {
+                        activateGameOverMode();
+                    }, 1000);
+                }
             }
+        }
         
-        
+        // Function to switch to "Mission Complete" mode
+        function activateMissionCompleteMode() {
+            gameRunning = false; // Stop the game
+            $("#background").css("background-color", "green");
+            $("#spacestation-container").hide();
+            $("#spaceship-container").hide();
+            $("#mission-complete").css("display", "block");
+
+            // Add a "MISSION COMPLETE" text to the background
+            const missionCompleteText = $("<div id='mission-complete-text'>MISSION COMPLETE</div>");
+            missionCompleteText.css({
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                fontSize: "48px",
+                fontWeight: "bold",
+                color: "white",
+                textShadow: "2px 2px 4px #000",
+                zIndex: "1",
+            });
+            $("body").append(missionCompleteText);
+        }
           // Function to switch to "Game Over" mode
-function activateGameOverMode() {
-    $("#background").css("background-color", "red");
-    $("#spacestation-container").hide();
-    $("#spaceship-container").hide();
-    $("#game-over").css("display", "block");
+        function activateGameOverMode() {
+            gameRunning = false; // Stop the game
+            $("#background").css("background-color", "red");
+            $("#spacestation-container").hide();
+            $("#spaceship-container").hide();
+            $("#game-over").css("display", "block");
 
-    // Add a "GAME OVER" text to the background
-    const gameOverText = $("<div id='game-over-text'>GAME OVER</div>");
-    gameOverText.css({
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        fontSize: "48px",
-        fontWeight: "bold",
-        color: "white",
-        textShadow: "2px 2px 4px #000",
-        zIndex: "1",
-    });
-    $("body").append(gameOverText);
-}           
+            // Add a "GAME OVER" text to the background
+            const gameOverText = $("<div id='game-over-text'>GAME OVER</div>");
+            gameOverText.css({
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                fontSize: "48px",
+                fontWeight: "bold",
+                color: "white",
+                textShadow: "2px 2px 4px #000",
+                zIndex: "1",
+            });
+            $("body").append(gameOverText);
+        }           
         
-
-        
-    
         // Update the space station size every specified interval
-        setInterval(increaseSpaceStationSize, sizeIncreaseInterval);
+        gameInterval = setInterval(increaseSpaceStationSize, sizeIncreaseInterval);
+
     
         // Function to move the space station to the left by 10 pixels
         function moveSpaceStationLeft() {
@@ -240,9 +267,6 @@ function activateGameOverMode() {
             dot.css("top", Math.random() * 100 + "%");
             stars.append(dot);
         }
-    </script>
-    
-    
-      
+    </script>     
 </body>
 </html>
