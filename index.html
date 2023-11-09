@@ -113,6 +113,8 @@
         let gameInterval;
         let gameRunning = true;
         let spaceStationContainer = $("#spacestation-container");
+        spaceStationContainer.css("left", Math.random() * 100 + "%");
+        spaceStationContainer.css("top", Math.random() * 100 + "%");
         let spaceStationSize = 100; // Initial size in pixels
         const maxSpaceStationSize = 770; // Maximum size
         const sizeIncreaseInterval = 25; // Interval for increasing size in milliseconds (half the previous value)
@@ -142,7 +144,12 @@
                 clearInterval(gameInterval);
 
                 // Check if the space station and spaceship are aligned
-                if (spaceStationCenterX === spaceshipCenterX && spaceStationCenterY === spaceshipCenterY) {
+                const alignmentTolerance = 10; // Adjust this value based on how strict you want the alignment to be
+                if (
+                    Math.abs(spaceStationCenterX - spaceshipCenterX) <= alignmentTolerance &&
+                    Math.abs(spaceStationCenterY - spaceshipCenterY) <= alignmentTolerance
+                ) {
+
                     // Space station and spaceship are aligned
                     // Wait for 1 second before activating Mission Complete mode
                     setTimeout(function () {
