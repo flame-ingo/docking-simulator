@@ -1,2 +1,23 @@
 # docking-simulator
-A simple docking simulater game for a project about AI-coded games. 
+
+Welcome to the Space Station Docking Game! A simple web-based game where you try to dock a spaceship with a space station 
+
+## How to Play
+
+1. **Start the Game:**
+   - Go to the game site <https://flame-ingo.github.io/docking-simulator/>
+
+2. **Move the Space Station:**
+   - Use the arrow keys (left, right, up, down) to align to the space station.
+   - The space station quickly gets closer as you play.
+
+3. **Objective:**
+   - Align the space station with the spaceship in the center.
+
+
+## Technologies Used
+
+- HTML
+- CSS
+- JavaScript (jQuery)
+
