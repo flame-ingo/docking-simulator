@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Space Station Docking Game</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #background {
+            background-color: black;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        #stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .dot {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+        }
+        #spacestation-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            perspective: 1000px;
+        }
+        #spacestation {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid white;
+            border-radius: 50%;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        #spaceship-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+        }
+        #spaceship {
+            width: 400px;
+            height: 400px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px solid blue;
+            border-radius: 50%;
+            box-sizing: border-box;
+            background-color: transparent;
+        }
+        #small-circle {
+            background-color: grey;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            z-index: 1;
+        }
+        .circle-outline {
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="background">
+        <div id="stars"></div>
+    </div>
+    <div id="spacestation-container">
+        <div id="spacestation">
+            <div id="small-circle"></div>
+            <div class="circle-outline"></div>
+        </div>
+    </div>
+    <div id="spaceship-container">
+        <div id="spaceship"></div>
+    </div>
+
+    <script>
+        let spaceStationContainer = $("#spacestation-container");
+        let spaceStationSize = 100; // Initial size in pixels
+        const maxSpaceStationSize = 770; // Maximum size
+        const sizeIncreaseInterval = 25; // Interval for increasing size in milliseconds (half the previous value)
+    
+        // Function to increase the size of the space station
+        function increaseSpaceStationSize() {
+            if (spaceStationSize < maxSpaceStationSize) {
+                spaceStationSize += 2; // Increase size by 2 pixels
+                spaceStationContainer.css("width", spaceStationSize + "px");
+                spaceStationContainer.css("height", spaceStationSize + "px");
+    
+                // Increase the size of the two circles proportionally
+                const circleSize = spaceStationSize / 2;
+                $("#small-circle").css("width", circleSize + "px");
+                $("#small-circle").css("height", circleSize + "px");
+                $(".circle-outline").css("width", spaceStationSize + "px");
+                $(".circle-outline").css("height", spaceStationSize + "px");
+            }
+
+                    // Check if the game should switch to "Game Over" mode
+        if (spaceStationSize >= 770) {
+            const spaceStationCenterX = spaceStationContainer.position().left + spaceStationSize / 2;
+            const spaceStationCenterY = spaceStationContainer.position().top + spaceStationSize / 2;
+            const spaceshipCenterX = $("#spaceship-container").position().left + 200; // Assuming spaceship is 400x400
+            const spaceshipCenterY = $("#spaceship-container").position().top + 200;
+
+            // Check if the space station and spaceship are aligned
+            if (spaceStationCenterX === spaceshipCenterX && spaceStationCenterY === spaceshipCenterY) {
+                // Space station and spaceship are aligned
+            } else {
+                // Space station and spaceship are not aligned
+                gameOver = true;
+                activateGameOverMode(); // Activate "Game Over" mode
+            }
+        }
+
+            }
+        
+        
+                        // Function to switch to "Game Over" mode
+        function activateGameOverMode() {
+            $("#background").css("background-color", "red");
+            $("#spacestation-container").hide();
+            $("#spaceship-container").hide();
+            $("#game-over").css("display", "block");
+
+             // Add a "GAME OVER" text to the background
+    const gameOverText = $("<div id='game-over-text'>GAME OVER</div>");
+    gameOverText.css({
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        fontSize: "48px",
+        fontWeight: "bold",
+        color: "white",
+        textShadow: "2px 2px 4px #000",
+        zIndex: "1",
+    });
+        }
+
+
+        
+    
+        // Update the space station size every specified interval
+        setInterval(increaseSpaceStationSize, sizeIncreaseInterval);
+    
+        // Function to move the space station to the left by 10 pixels
+        function moveSpaceStationLeft() {
+            const currentPosition = spaceStationContainer.position();
+            const currentLeft = currentPosition.left + spaceStationContainer.width() / 2;
+            spaceStationContainer.css("left", (currentLeft - 10) + "px");
+        }
+    
+        // Function to move the space station to the right by 10 pixels
+        function moveSpaceStationRight() {
+            const currentPosition = spaceStationContainer.position();
+            const currentLeft = currentPosition.left + spaceStationContainer.width() / 2;
+            spaceStationContainer.css("left", (currentLeft + 10) + "px");
+        }
+    
+        // Function to move the space station up by 10 pixels
+        function moveSpaceStationUp() {
+            const currentPosition = spaceStationContainer.position();
+            const currentTop = currentPosition.top + spaceStationContainer.height() / 2;
+            spaceStationContainer.css("top", (currentTop - 10) + "px");
+        }
+    
+        // Function to move the space station down by 10 pixels
+        function moveSpaceStationDown() {
+            const currentPosition = spaceStationContainer.position();
+            const currentTop = currentPosition.top + spaceStationContainer.height() / 2;
+            spaceStationContainer.css("top", (currentTop + 10) + "px");
+        }
+    
+        // Listen for arrow key presses and stop other listeners and prevent the default action
+        $(document).on("keydown", function (e) {
+            if (e.key === "ArrowLeft") {
+                moveSpaceStationLeft();
+                e.stopPropagation(); // Stop other listeners
+                e.preventDefault();  // Prevent the default action
+            } else if (e.key === "ArrowRight") {
+                moveSpaceStationRight();
+                e.stopPropagation(); // Stop other listeners
+                e.preventDefault();  // Prevent the default action
+            } else if (e.key === "ArrowUp") {
+                moveSpaceStationUp();
+                e.stopPropagation(); // Stop other listeners
+                e.preventDefault();  // Prevent the default action
+            } else if (e.key === "ArrowDown") {
+                moveSpaceStationDown();
+                e.stopPropagation(); // Stop other listeners
+                e.preventDefault();  // Prevent the default action
+            }
+        });
+    
+        // Generate immobile white dots (stars)
+        const numDots = 200;
+        const stars = $("#stars");
+        for (let i = 0; i < numDots; i++) {
+            const dot = $("<div class='dot'></div>");
+            dot.css("left", Math.random() * 100 + "%");
+            dot.css("top", Math.random() * 100 + "%");
+            stars.append(dot);
+        }
+    </script>
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</body>
+</html>
