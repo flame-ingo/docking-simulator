@@ -15,6 +15,9 @@ This game was made using ChatGPT.
 
 3. **Objective:**
    - Align the space station with the spaceship in the center.
+  
+4. **Play Again!:**
+   - Press the reload button to play the game again!
 
 
 ## Technologies Used
